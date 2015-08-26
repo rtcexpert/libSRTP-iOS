@@ -1,4 +1,12 @@
 /*
+ * getopt.h
+ *
+ * interface to a minimal implementation of the getopt() function,
+ * written so that test applications that use that function can run on
+ * non-POSIX platforms
+ *
+ */
+/*
  *	
  * Copyright (c) 2001-2006 Cisco Systems, Inc.
  * All rights reserved.
@@ -33,3 +41,20 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+#ifndef GETOPT_S_H
+#define GETOPT_S_H
+
+/* 
+ * getopt_s(), optarg_s, and optind_s are small, locally defined
+ * versions of the POSIX standard getopt() interface.
+ */
+ 
+int
+getopt_s(int argc, char * const argv[], const char *optstring);
+
+extern char *optarg_s;    /* defined in getopt.c */
+
+extern int optind_s;      /* defined in getopt.c */
+
+#endif /* GETOPT_S_H */

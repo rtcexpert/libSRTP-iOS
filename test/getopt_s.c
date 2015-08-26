@@ -1,4 +1,12 @@
 /*
+ * getopt.c
+ *
+ * a minimal implementation of the getopt() function, written so that
+ * test applications that use that function can run on non-POSIX
+ * platforms 
+ *
+ */
+/*
  *	
  * Copyright (c) 2001-2006 Cisco Systems, Inc.
  * All rights reserved.
@@ -33,3 +41,72 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+#include <stdlib.h>  /* for NULL */
+
+int optind_s = 0;
+
+char *optarg_s;
+
+#define GETOPT_FOUND_WITHOUT_ARGUMENT    2
+#define GETOPT_FOUND_WITH_ARGUMENT       1
+#define GETOPT_NOT_FOUND                 0 
+
+static int 
+getopt_check_character(char c, const char *string) {
+  unsigned int max_string_len = 128;
+
+  while (*string != 0) {
+    if (max_string_len == 0) {
+      return '?';
+    }
+    if (*string++ == c) {
+      if (*string == ':') {
+	return GETOPT_FOUND_WITH_ARGUMENT;
+      } else {
+	return GETOPT_FOUND_WITHOUT_ARGUMENT;
+      }
+    }
+  }
+  return GETOPT_NOT_FOUND;
+}
+
+int
+getopt_s(int argc, 
+       char * const argv[], 
+       const char *optstring) {
+
+
+  while (optind_s + 1 < argc) {
+    char *string;
+    
+    /* move 'string' on to next argument */
+    optind_s++;
+    string = argv[optind_s];
+
+    if (string == NULL)
+      return '?'; /* NULL argument string */
+
+    if (string[0] != '-')
+      return -1; /* found an unexpected character */
+
+    switch(getopt_check_character(string[1], optstring)) {
+    case GETOPT_FOUND_WITH_ARGUMENT:
+      if (optind_s + 1 < argc) {
+	optind_s++;
+	optarg_s = argv[optind_s];
+	return string[1]; 
+      } else {
+	return '?';  /* argument missing */
+      }
+    case GETOPT_FOUND_WITHOUT_ARGUMENT:
+      return string[1];
+    case GETOPT_NOT_FOUND:
+    default:
+      return '?'; /* didn't find expected character */
+      break;
+    }
+  }
+
+  return -1;
+}

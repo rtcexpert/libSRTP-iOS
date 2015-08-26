@@ -1,4 +1,14 @@
 /*
+ * rtp_decoder.h
+ *
+ * decoder structures and functions for SRTP pcap decoder
+ *
+ * Bernardo Torres <bernardo@torresautomacao.com.br>
+ *
+ * Some structure and code from https://github.com/gteissier/srtp-decrypt
+ *
+ */
+/*
  *	
  * Copyright (c) 2001-2006 Cisco Systems, Inc.
  * All rights reserved.
@@ -33,3 +43,63 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+
+#ifndef RTP_DECODER_H
+#define RTP_DECODER_H
+
+#include "srtp_priv.h"
+#include "rtp_priv.h"
+#include "rtp.h"
+
+#define DEFAULT_RTP_OFFSET 42
+
+typedef struct rtp_decoder_ctx_t {
+  srtp_policy_t policy;
+  srtp_ctx_t *srtp_ctx;
+  int rtp_offset;
+  struct timeval start_tv;
+  int frame_nr;
+  rtp_msg_t message;
+} rtp_decoder_ctx_t;
+
+typedef struct rtp_decoder_ctx_t *rtp_decoder_t;
+
+/*
+ * error to string
+ */
+void rtp_print_error(srtp_err_status_t status, char *message);
+
+/* 
+ * prints the output of a random buffer in hexadecimal
+ */
+void hexdump(const void *ptr, size_t size);
+
+/*
+ * the function usage() prints an error message describing how this
+ * program should be called, then calls exit()
+ */
+void usage(char *prog_name);
+
+/*
+ * transforms base64 key into octet
+ */
+char *decode_sdes(char *in, char *out);
+
+/* 
+ * pcap handling
+ */
+void rtp_decoder_handle_pkt(u_char *arg, const struct pcap_pkthdr *hdr, const u_char *bytes);
+
+rtp_decoder_t rtp_decoder_alloc(void);
+
+void rtp_decoder_dealloc(rtp_decoder_t rtp_ctx);
+
+int rtp_decoder_init(rtp_decoder_t dcdr, srtp_policy_t policy);
+
+srtp_err_status_t rtp_decoder_init_srtp(rtp_decoder_t decoder, unsigned int ssrc);
+
+int
+rtp_decoder_deinit_srtp(rtp_decoder_t decoder);
+
+#endif /* RTP_DECODER_H */

@@ -1,6 +1,15 @@
 /*
+ * stats.h
+ * 
+ * interface to statistical test functions
+ *
+ * David A. McGrew
+ * Cisco Systems, Inc.
+ */
+
+/*
  *	
- * Copyright (c) 2001-2006 Cisco Systems, Inc.
+ * Copyright(c) 2001-2006, Cisco Systems, Inc.
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -33,3 +42,18 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+
+#ifndef STAT_H
+#define STAT_H
+
+#include "datatypes.h"       /* for uint8_t                       */
+#include "err.h"             /* for srtp_err_status_t             */
+
+srtp_err_status_t stat_test_monobit(uint8_t *data);
+
+srtp_err_status_t stat_test_poker(uint8_t *data);
+
+srtp_err_status_t stat_test_runs(uint8_t *data);
+
+#endif /* STAT_H */

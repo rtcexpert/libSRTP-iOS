@@ -1,4 +1,12 @@
 /*
+ * alloc.c
+ *
+ * memory allocation and deallocation 
+ *
+ * David A. McGrew
+ * Cisco Systems, Inc.
+ */
+/*
  *	
  * Copyright (c) 2001-2006 Cisco Systems, Inc.
  * All rights reserved.
@@ -33,3 +41,55 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+#ifdef HAVE_CONFIG_H
+    #include <config.h>
+#endif
+
+#include "alloc.h"
+#include "crypto_kernel.h"
+
+/* the debug module for memory allocation */
+
+srtp_debug_module_t mod_alloc = {
+  0,                  /* debugging is off by default */
+  "alloc"             /* printable name for module   */
+};
+
+/*
+ * Nota bene: the debugging statements for srtp_crypto_alloc() and
+ * srtp_crypto_free() have identical prefixes, which include the addresses
+ * of the memory locations on which they are operating.  This fact can
+ * be used to locate memory leaks, by turning on memory debugging,
+ * grepping for 'alloc', then matching alloc and free calls by
+ * address.
+ */
+
+#if defined(HAVE_STDLIB_H)
+
+void * srtp_crypto_alloc(size_t size) {
+  void *ptr;
+
+  ptr = malloc(size);
+    
+  if (ptr) {
+    debug_print(mod_alloc, "(location: %p) allocated", ptr);
+  } else {
+    debug_print(mod_alloc, "allocation failed (asked for %d bytes)\n", size);
+  }
+
+  return ptr;
+}
+
+void srtp_crypto_free(void *ptr) {
+
+  debug_print(mod_alloc, "(location: %p) freed", ptr);
+
+  free(ptr);
+}
+
+#else  /* we need to define our own memory allocation routines */
+
+#error no memory allocation defined yet 
+
+#endif

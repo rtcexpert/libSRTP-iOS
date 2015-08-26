@@ -1,4 +1,12 @@
 /*
+ * rtp_priv.h
+ *
+ * private, internal header file for RTP
+ *
+ * David A. McGrew
+ * Cisco Systems, Inc.
+ */
+/*
  *	
  * Copyright (c) 2001-2006 Cisco Systems, Inc.
  * All rights reserved.
@@ -33,3 +41,13 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+
+#ifndef RTP_PRIV_H
+#define RTP_PRIV_H
+
+#include "srtp_priv.h"
+#include "rtp.h"
+
+
+#endif /* RTP_PRIV_H */

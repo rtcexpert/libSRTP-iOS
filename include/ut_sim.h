@@ -1,6 +1,16 @@
 /*
+ * ut-sim.h
+ *
+ * an unreliable transport simulator
+ * (for testing replay databases and suchlike)
+ *
+ * David A. McGrew
+ * Cisco Systems, Inc.
+ */
+
+/*
  *	
- * Copyright (c) 2001-2006 Cisco Systems, Inc.
+ * Copyright (c) 2001-2006, Cisco Systems, Inc.
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -33,3 +43,38 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+
+
+#ifndef UT_SIM_H
+#define UT_SIM_H
+
+#include "integers.h"  /* for uint32_t */
+
+#define UT_BUF 160      /* maximum amount of packet reorder */
+
+typedef struct {
+  uint32_t index;
+  uint32_t buffer[UT_BUF];
+} ut_connection;
+
+/*
+ * ut_init(&u) initializes the ut_connection 
+ *
+ * this function should always be the first one called on a new
+ * ut_connection
+ */
+
+void
+ut_init(ut_connection *utc);
+
+/*
+ * ut_next_index(&u) returns the next index from the simulated
+ * unreliable connection
+ */
+
+uint32_t
+ut_next_index(ut_connection *utc);
+
+
+#endif /* UT_SIM_H */

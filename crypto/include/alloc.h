@@ -1,4 +1,12 @@
 /*
+ * alloc.h
+ *
+ * interface to memory allocation and deallocation, with optional debugging 
+ *
+ * David A. McGrew
+ * Cisco Systems, Inc.
+ */
+/*
  *	
  * Copyright (c) 2001-2006 Cisco Systems, Inc.
  * All rights reserved.
@@ -33,3 +41,15 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+
+#ifndef CRYPTO_ALLOC_H
+#define CRYPTO_ALLOC_H
+
+#include "datatypes.h"
+
+void * srtp_crypto_alloc(size_t size);
+
+void srtp_crypto_free(void *ptr);
+
+#endif /* CRYPTO_ALLOC_H */
