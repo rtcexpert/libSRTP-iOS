@@ -1,0 +1,6 @@
+{
+  "name": "Libsrtp-ios",
+  "tagline": "libSRTP for iOS. ",
+  "body": "# libSRTP-iOS\r\nlibSRTP for iOS. \r\n\r\nyou just need to run “sh build.sh”\r\n\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
